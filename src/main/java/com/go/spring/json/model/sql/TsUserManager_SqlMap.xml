@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="tsUserManager">
+  
+  <typeAlias alias="USERMANAGERREQ" type="com.go.spring.json.bean.TsUserManagerRequestBean"/>
+  <typeAlias alias="USERMANAGERRES" type="com.go.spring.json.bean.TsUserManagerResponseBean"/>
+  
+  <select id="getAllUser" parameterClass="USERMANAGERREQ" resultClass="USERMANAGERRES">
+  	  select tsua.id as id, tsua.user_name as userName,
+	  tsua.user_passwd as userPasswd,tsua.nick_name as nickName,
+  	  tsub.user_name as creatorStr,
+  	  DATE_FORMAT(tsua.create_time,'%Y-%m-%d %H:%i') as creatorTimeStr
+  	  from t_s_user as tsua
+  	  left join t_s_user as tsub on tsub.id = tsua.creator
+  	  where tsua.isdel = 0
+  </select>
+  
+  <insert id="addUser" parameterClass="USERMANAGERREQ">
+  		insert into t_s_user (user_name , user_passwd , nick_name , create_time , creator) 
+  		values (#userName#,#userPasswd#,#nickName#,NOW(),#creator#)
+  </insert>
+  
+  <update id="updateUser" parameterClass="USERMANAGERREQ">
+  		update t_s_user set user_name=#userName#,nick_name=#nickName#,editor=#editor#,edit_time=NOW() where id=#id#
+  </update>
+  
+  <update id="deleteUser" parameterClass="USERMANAGERREQ" >
+  		update t_s_user set isdel=1,edit_time=NOW(),editor=#editor# where id = #id#
+  </update>
+  
+  <select id="getOneUser" parameterClass="USERMANAGERREQ" resultClass="USERMANAGERRES">
+  		select tsua.id as id, tsua.user_name as userName,
+	  tsua.user_passwd as userPasswd,tsua.nick_name as nickName,
+  	  tsub.user_name as creatorStr,
+  	  DATE_FORMAT(tsua.create_time,'%Y-%m-%d %k:%i') as creatorTimeStr
+  	  from t_s_user as tsua
+  	  left join t_s_user as tsub on tsub.id = tsua.creator
+  	  where tsua.user_name=#userName#  and tsua.isdel = 0
+  </select>
+  
+  <select id="validateUserNameAndPwd" parameterClass="USERMANAGERREQ" resultClass="USERMANAGERRES">
+  		select id from t_s_user where id=#id# and user_passwd=#userPasswd# 
+  		and isdel=0
+  </select>
+  
+  <update id="updateUserPasswd" parameterClass="USERMANAGERREQ">
+  		update t_s_user set user_passwd=#userNewPasswd# where id=#id#
+  </update>
+  
+</sqlMap>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="tsUser">
+  
+  <typeAlias alias="TSUSERREQ" type="com.go.spring.action.bean.TsUserLoginRequestBean"/>
+  <typeAlias alias="TSUSERRES" type="com.go.spring.action.bean.TsUserLoginResponseBean"/>
+  
+   <select id="getOneTsUser" parameterClass="TSUSERREQ" resultClass="TSUSERRES">
+  	  select id, user_name as UserName,user_passwd as userPasswd,nick_name as nickName from t_s_user 
+  	  where user_name=#userName# and user_passwd=#userPasswd# and isdel = 0
+  </select>
+  
+</sqlMap>

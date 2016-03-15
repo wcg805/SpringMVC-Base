@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="menu">
+  
+  
+    <typeAlias alias="TSMENU" type="com.go.spring.action.bean.TsMenuResponseBean"/>
+    <typeAlias alias="TSMENUITEM" type="com.go.spring.action.bean.TsMenuItemResponseBean"/>
+    
+	<select id="getFatherMenulist" resultClass="TSMENU">
+		select distinct a.MENU_ID as menuId,d.MENU_NAME as menuName,d.MENU_URL as menuUrl
+		from T_S_MENU a
+		left join T_S_MENU_EX d on d.MENU_ID=a.MENU_ID
+		where a.ISDEL=0 and a.MENU_PARENT='0' order by a.`order`
+	</select>
+	<select id="getAllMenulist" resultClass="TSMENUITEM">
+		select distinct a.MENU_ID as itemId,a.MENU_PARENT as
+		itemParent,d.MENU_NAME as itemName,
+		d.MENU_URL as itemUrl from T_S_MENU a
+		left join T_S_MENU_EX d on
+		d.MENU_ID=a.MENU_ID
+		where a.ISDEL=0
+		and a.MENU_PARENT!='0' order by
+		a.MENU_ID
+	</select>
+</sqlMap>
+
